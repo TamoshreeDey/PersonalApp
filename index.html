@@ -1,0 +1,263 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>I'm Sorry 💗</title>
+<link href="https://fonts.googleapis.com/css2?family=Fredoka:wght@400;600&family=Pacifico&family=Bebas+Neue&display=swap" rel="stylesheet">
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+<style>
+:root{--pink:#ffd6e6;--pink2:#ffb8d2;--hot:#ff7aa8;--ink:#7a3b57;--white:#fffafc;box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px);color-scheme:light}
+*{box-sizing:border-box}
+html{scroll-padding-top:env(safe-area-inset-top,0px)}
+body{margin:0;min-height:100vh;background:var(--pink);font-family:'Fredoka',system-ui,sans-serif;color:var(--ink);display:flex;align-items:center;justify-content:center;overflow-x:hidden;position:relative}
+.bg{position:fixed;inset:0;pointer-events:none;z-index:0}
+.bg span{position:absolute;font-size:26px;opacity:.5;animation:float 7s ease-in-out infinite}
+@keyframes float{0%,100%{transform:translateY(0) rotate(-6deg)}50%{transform:translateY(-22px) rotate(8deg)}}
+.screen{display:none;width:100%;max-width:640px;padding:20px;position:relative;z-index:1;text-align:center}
+.screen.on{display:block;animation:pop .5s ease}
+@keyframes pop{from{opacity:0;transform:scale(.9) translateY(12px)}to{opacity:1;transform:none}}
+.card{background:var(--white);border-radius:32px;padding:30px 22px;box-shadow:0 12px 0 var(--pink2),0 24px 40px rgba(255,122,168,.3);border:4px dashed var(--pink2)}
+.bear{font-size:64px;display:inline-block;animation:bounce 1.6s infinite}
+@keyframes bounce{0%,100%{transform:translateY(0)}50%{transform:translateY(-14px)}}
+h1{font-family:'Pacifico',cursive;font-weight:400;font-size:clamp(26px,6vw,38px);margin:8px 0 10px;color:var(--hot)}
+p.msg{font-size:19px;line-height:1.5;margin:0 0 20px}
+.btns{display:flex;gap:16px;justify-content:center;flex-wrap:wrap;align-items:center;min-height:70px}
+button{font-family:inherit;cursor:pointer;border:0}
+.yes,.go{background:linear-gradient(#ff9bbf,#ff6f9f);color:#fff;font-size:20px;font-weight:600;padding:14px 28px;border-radius:50px;box-shadow:0 6px 0 #d94f80;transition:.1s}
+.yes:active,.go:active{transform:translateY(4px);box-shadow:0 2px 0 #d94f80}
+.no{position:relative;background:#e9e2ea;color:#6d5a70;font-size:20px;font-weight:600;padding:14px 34px;border-radius:50px;box-shadow:0 6px 0 #bfb3c2;min-width:110px}
+.no.cracked{background:transparent;box-shadow:none;cursor:default}
+.half{position:absolute;inset:0;display:flex;align-items:center;justify-content:center;background:#e9e2ea;border-radius:50px;box-shadow:0 6px 0 #bfb3c2;transition:transform 1s cubic-bezier(.5,0,1,.6),opacity 1s}
+.half.l{clip-path:polygon(0 0,52% 0,42% 30%,58% 58%,46% 100%,0 100%)}
+.half.r{clip-path:polygon(52% 0,100% 0,100% 100%,46% 100%,58% 58%,42% 30%)}
+.fall .half.l{transform:translate(-26px,120px) rotate(-28deg);opacity:0}
+.fall .half.r{transform:translate(26px,140px) rotate(24deg);opacity:0}
+.crack{position:absolute;inset:-6px;width:calc(100% + 12px);height:calc(100% + 12px);z-index:3;pointer-events:none}
+.crack path{stroke:#5a3a62;stroke-width:3;fill:none;stroke-linecap:round;stroke-dasharray:140;stroke-dashoffset:140;animation:draw .35s forwards}
+@keyframes draw{to{stroke-dashoffset:0}}
+.shake{animation:shake .4s}
+@keyframes shake{25%{transform:translateX(-6px) rotate(-3deg)}75%{transform:translateX(6px) rotate(3deg)}}
+#oops{margin-top:16px;font-size:18px;font-weight:600;color:var(--hot);min-height:28px}
+.grid{display:grid;grid-template-columns:1fr 1fr;gap:16px;margin-top:18px}
+.opt{aspect-ratio:1;border-radius:28px;font-size:20px;font-weight:600;color:var(--ink);display:flex;flex-direction:column;align-items:center;justify-content:center;gap:8px;box-shadow:0 8px 0 rgba(122,59,87,.18);transition:.15s}
+.opt i{font-style:normal;font-size:46px}
+.opt:hover{transform:translateY(-4px) rotate(-2deg)}
+.opt:active{transform:translateY(4px)}
+.o1{background:#fff3a6}.o2{background:#aee1ff}.o3{background:#bff0c4}.o4{background:#ffd0a1}
+.overlay{position:fixed;inset:0;z-index:20;background:rgba(255,214,230,.94);display:none;align-items:center;justify-content:center;flex-direction:column;padding:16px;overflow-y:auto}
+.overlay.on{display:flex}
+.won{font-size:18px;font-weight:600;max-width:560px;margin:0 0 16px;line-height:1.45}
+.won b{font-family:'Pacifico',cursive;font-weight:400;color:var(--hot);font-size:22px}
+/* ticket */
+.ticket{width:min(94vw,560px);background:#d92b2b;border-radius:18px;padding:10px;position:relative;box-shadow:0 18px 30px rgba(120,20,40,.35);animation:hover 3s ease-in-out infinite;display:block;text-align:left;color:#fff}
+@keyframes hover{0%,100%{transform:translateY(0) rotate(-1.5deg)}50%{transform:translateY(-12px) rotate(1.5deg)}}
+.ticket.click{cursor:pointer;outline:4px dashed #fff}
+.tin{display:flex;background:#141414;border-radius:12px;overflow:hidden;min-height:190px;position:relative}
+.film{width:26px;background:#d92b2b;flex:none;background-image:radial-gradient(circle,#141414 4px,transparent 5px);background-size:26px 18px;background-position:center}
+.main{flex:1;padding:10px 12px;display:flex;flex-direction:column;gap:6px;min-width:0}
+.hdr{color:#ffd23f;font-family:'Bebas Neue',sans-serif;letter-spacing:3px;font-size:16px;text-align:center;border-bottom:2px dotted #ffd23f;padding-bottom:4px}
+.row{display:flex;gap:10px;align-items:center;flex:1}
+.poster{width:78px;height:112px;flex:none;border-radius:6px;overflow:hidden;border:2px solid #ffd23f}
+.info{flex:1;min-width:0}
+.big{font-family:'Bebas Neue',sans-serif;font-size:28px;color:#ffd23f;line-height:1;letter-spacing:1px}
+.what{background:#ffd23f;color:#141414;font-weight:600;font-size:14px;border-radius:6px;padding:4px 8px;margin:6px 0;display:inline-block}
+.when{font-size:13px;color:#fff;opacity:.95}
+.emoji{position:absolute;right:92px;bottom:6px;font-size:34px}
+.stub{width:84px;flex:none;background:#fff8e7;color:#141414;border-left:3px dashed #d92b2b;display:flex;flex-direction:column;align-items:center;justify-content:center;padding:8px 4px;gap:6px}
+.stub .big{color:#d92b2b;font-size:20px;writing-mode:vertical-rl;transform:rotate(180deg)}
+.bars{width:56px;height:70px;background:repeating-linear-gradient(90deg,#111 0 2px,#fff8e7 2px 4px,#111 4px 5px,#fff8e7 5px 8px,#111 8px 11px,#fff8e7 11px 12px)}
+.hint{margin-top:14px;font-weight:600;font-size:16px}
+/* claim form */
+.form{background:var(--white);border-radius:26px;padding:20px;margin-top:16px;width:min(92vw,420px);border:3px dashed var(--pink2);display:none;text-align:left}
+.form.on{display:block;animation:pop .4s}
+.form label{display:block;font-weight:600;margin:8px 0 4px}
+.form input{width:100%;font:inherit;font-size:18px;padding:12px;border-radius:16px;border:3px solid var(--pink2);background:#fff;color:var(--ink)}
+.form .go{margin-top:16px;width:100%}
+#claim{margin-top:18px}
+#final{display:none;font-family:'Pacifico',cursive;font-size:clamp(26px,7vw,40px);color:var(--hot);margin-top:20px;animation:pop .6s}
+canvas#cf{position:fixed;inset:0;pointer-events:none;z-index:50;width:100%;height:100%}
+</style>
+</head>
+<body>
+<div class="bg" id="bg"></div>
+
+<div class="screen on" id="s1">
+  <div class="card">
+    <div class="bear">🧸</div>
+    <h1>Hey you, my love…</h1>
+    <p class="msg">I'm sorry that I didn't watch the movie with you yesterday, and that we talked less. 🥺💗<br>Will you forgive me?</p>
+    <div class="btns">
+      <button class="yes" id="yes">Forgiven 💖</button>
+      <button class="no" id="no"><span id="nolabel">No 😤</span></button>
+    </div>
+    <div id="oops"></div>
+  </div>
+</div>
+
+<div class="screen" id="s2">
+  <div class="card">
+    <h1>Yay! 🎀 Pick your date</h1>
+    <p class="msg">Choose how you want me to make it up to you…</p>
+    <div class="grid">
+      <button class="opt o1" data-k="movie"><i>🎬</i>Movie</button>
+      <button class="opt o2" data-k="voice"><i>📞</i>Voice call</button>
+      <button class="opt o3" data-k="video"><i>📹</i>Video call</button>
+      <button class="opt o4" data-k="all"><i>💝</i>All of the above</button>
+    </div>
+  </div>
+</div>
+
+<div class="overlay" id="ov">
+  <p class="won" id="won"></p>
+  <div class="ticket" id="ticket">
+    <div class="tin">
+      <div class="film"></div>
+      <div class="main">
+        <div class="hdr">★ ADMIT ONE ★ DATE NIGHT ★</div>
+        <div class="row">
+          <div class="poster" id="poster"></div>
+          <div class="info">
+            <div class="big">LUXURIOUS DATE</div>
+            <div class="what" id="twhat"></div>
+            <div class="when" id="twhen">Time: to be claimed 💕</div>
+          </div>
+        </div>
+      </div>
+      <div class="emoji">🍿</div>
+      <div class="stub"><div class="bars"></div><div class="big">SORRY BABY</div></div>
+    </div>
+  </div>
+  <button class="go" id="claim">Claim it 🎟️</button>
+  <div class="form" id="form">
+    <label for="d">Pick a day 📅</label>
+    <input type="date" id="d">
+    <label for="t">Pick a time ⏰</label>
+    <input type="time" id="t">
+    <button class="go" id="save">Save and proceed 💌</button>
+  </div>
+  <div class="hint" id="hint" style="display:none">Tap your ticket to download it 🎟️⬇️</div>
+  <div id="final">Sorry baby, I love you a lot 💗</div>
+</div>
+<canvas id="cf"></canvas>
+
+<script>
+// floating background
+(function(){var e=['🌸','💗','✨','🎀','🌷','💕','☁️'],b=document.getElementById('bg');
+for(var i=0;i<18;i++){var s=document.createElement('span');s.textContent=e[i%e.length];s.style.left=(Math.random()*95)+'%';s.style.top=(Math.random()*92)+'%';s.style.animationDelay=(-Math.random()*7)+'s';s.style.fontSize=(18+Math.random()*22)+'px';b.appendChild(s)}})();
+
+var $=function(i){return document.getElementById(i)};
+function show(id){document.querySelectorAll('.screen').forEach(function(s){s.classList.remove('on')});$(id).classList.add('on')}
+
+// NO button breaks
+var broke=false;
+$('no').addEventListener('click',function(){
+  if(broke)return;broke=true;
+  var b=$('no'),t=b.textContent.trim();
+  b.classList.add('shake');
+  setTimeout(function(){
+    b.classList.remove('shake');b.classList.add('cracked');
+    b.innerHTML='<div class="half l">'+t+'</div><div class="half r">'+t+'</div>'+
+      '<svg class="crack" viewBox="0 0 100 40" preserveAspectRatio="none"><path d="M52 0 L42 12 L58 23 L46 40"/></svg>';
+    setTimeout(function(){b.classList.add('fall');setTimeout(function(){var c=b.querySelector('.crack');if(c)c.remove()},900)},450);
+    $('oops').textContent='Oops, you broke that 💔 maybe take the other option? 🥹';
+  },400);
+});
+$('yes').addEventListener('click',function(){show('s2');burst(80)});
+
+// choice
+var choice='',when='';
+var names={movie:'movie',voice:'voice call',video:'video call',all:'movie, then voice call, then video call'};
+var poster='<svg viewBox="0 0 78 112" width="78" height="112"><defs><linearGradient id="g" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#7fc8ff"/><stop offset=".6" stop-color="#ffd1e3"/><stop offset="1" stop-color="#ffe9a8"/></linearGradient></defs><rect width="78" height="112" fill="url(#g)"/><circle cx="58" cy="22" r="9" fill="#fff6c8"/><ellipse cx="20" cy="30" rx="14" ry="5" fill="#fff" opacity=".8"/><path d="M0 92 Q20 70 40 88 T78 80 V112 H0Z" fill="#6cc08a"/><circle cx="39" cy="68" r="8" fill="#ffb199"/><path d="M31 76 h16 l4 16 h-24z" fill="#ff7aa8"/><text x="39" y="14" text-anchor="middle" font-family="Bebas Neue,Impact,sans-serif" font-size="18" fill="#c9254b" letter-spacing="2">MIRAI</text><text x="39" y="106" text-anchor="middle" font-family="sans-serif" font-size="6" fill="#7a3b57">THE FUTURE AWAITS</text></svg>';
+document.querySelectorAll('.opt').forEach(function(o){o.addEventListener('click',function(){
+  choice=o.dataset.k;
+  var n=names[choice];
+  $('won').innerHTML='🎉 You have won this luxurious date of <b>'+n+'</b> with your girlfriend, claim it. 🎉';
+  $('twhat').textContent=choice==='all'?'MOVIE + VOICE + VIDEO':n.toUpperCase();
+  $('poster').innerHTML=(choice==='movie'||choice==='all')?poster:'<div style="height:100%;display:flex;align-items:center;justify-content:center;font-size:44px;background:#ffd6e6">'+(choice==='voice'?'📞':'📹')+'</div>';
+  $('ov').classList.add('on');
+  burst(160);setTimeout(function(){burst(120)},700);
+})});
+
+// claim
+$('claim').addEventListener('click',function(){$('claim').style.display='none';$('form').classList.add('on');
+  var d=new Date();$('d').min=d.toISOString().slice(0,10)});
+function fmtT(v){var p=v.split(':'),h=+p[0],a=h>=12?'PM':'AM';h=h%12||12;return h+':'+p[1]+' '+a}
+$('save').addEventListener('click',function(){
+  if(!$('d').value||!$('t').value){$('save').textContent='Pick both day & time 🥺';return}
+  var dt=new Date($('d').value+'T00:00');
+  when=dt.toLocaleDateString('en-GB',{weekday:'short',day:'numeric',month:'short',year:'numeric'})+' at '+fmtT($('t').value);
+  $('twhen').textContent='When: '+when;
+  $('form').classList.remove('on');
+  $('hint').style.display='block';
+  $('ticket').classList.add('click');
+  burst(100);
+});
+
+// PDF
+function makePdf(){
+  var J=window.jspdf.jsPDF,doc=new J({orientation:'landscape',unit:'mm',format:[200,86]});
+  doc.setFillColor(255,214,230);doc.rect(0,0,200,86,'F');
+  doc.setFillColor(217,43,43);doc.roundedRect(5,5,190,76,6,6,'F');
+  doc.setFillColor(20,20,20);doc.roundedRect(9,9,182,68,4,4,'F');
+  doc.setFillColor(217,43,43);doc.rect(9,9,10,68,'F');
+  doc.setFillColor(20,20,20);for(var y=14;y<76;y+=7)doc.circle(14,y,1.6,'F');
+  // stub
+  doc.setFillColor(255,248,231);doc.rect(155,9,36,68,'F');
+  doc.setDrawColor(217,43,43);doc.setLineDashPattern([1.5,1.5],0);doc.setLineWidth(.6);doc.line(155,9,155,77);doc.setLineDashPattern([],0);
+  doc.setFillColor(20,20,20);for(var x=159,i=0;x<187;x+=2.6,i++)doc.rect(x,18,(i%3)+.8,26,'F');
+  doc.setTextColor(217,43,43);doc.setFont('helvetica','bold');doc.setFontSize(11);
+  doc.text('SORRY BABY',173,52,{align:'center'});doc.setFontSize(8);doc.text('ADMIT ONE',173,58,{align:'center'});
+  doc.setTextColor(20,20,20);doc.setFontSize(7);doc.text('with love',173,68,{align:'center'});
+  // header
+  doc.setTextColor(255,210,63);doc.setFontSize(11);doc.text('* ADMIT ONE * DATE NIGHT *',87,18,{align:'center'});
+  doc.setDrawColor(255,210,63);doc.setLineDashPattern([.8,1.2],0);doc.line(24,21,150,21);doc.setLineDashPattern([],0);
+  var tx=26;
+  if(choice==='movie'||choice==='all'){
+    doc.setFillColor(127,200,255);doc.rect(25,25,34,48,'F');doc.setFillColor(255,209,227);doc.rect(25,45,34,16,'F');
+    doc.setFillColor(108,192,138);doc.rect(25,62,34,11,'F');doc.setFillColor(255,246,200);doc.circle(52,32,4,'F');
+    doc.setTextColor(201,37,75);doc.setFontSize(14);doc.text('MIRAI',42,34,{align:'center'});
+    doc.setDrawColor(255,210,63);doc.setLineWidth(.6);doc.rect(25,25,34,48);
+    tx=65;
+  }
+  doc.setTextColor(255,210,63);doc.setFontSize(22);doc.text('LUXURIOUS DATE',tx,36);
+  doc.setFillColor(255,210,63);var w=choice==='all'?'MOVIE + VOICE CALL + VIDEO CALL':names[choice].toUpperCase();
+  doc.setFontSize(10);var tw=doc.getTextWidth(w)+6;doc.roundedRect(tx,41,Math.min(tw,86),8,1.5,1.5,'F');
+  doc.setTextColor(20,20,20);doc.text(w,tx+3,46.6);
+  doc.setTextColor(255,255,255);doc.setFont('helvetica','normal');doc.setFontSize(10);
+  doc.text('When: '+when,tx,58);
+  doc.setTextColor(255,170,200);doc.setFontSize(9);doc.text('Redeemable with your girlfriend. No refunds, only hugs.',tx,68);
+  return doc.output('arraybuffer');
+}
+var saving=false;
+$('ticket').addEventListener('click',async function(){
+  if(!this.classList.contains('click')||saving)return;saving=true;
+  try{
+    var blob=new Blob([makePdf()],{type:'application/pdf'});
+    var a=document.createElement('a');a.href=URL.createObjectURL(blob);a.download='our-date-ticket.pdf';
+    document.body.appendChild(a);a.click();a.remove();setTimeout(function(){URL.revokeObjectURL(a.href)},2000);
+    $('hint').style.display='none';$('ticket').classList.remove('click');
+    $('final').style.display='block';burst(160);
+  }catch(e){ if(!e||e.code!=='declined')console.error(e) }
+  saving=false;
+});
+
+// confetti
+var cv=$('cf'),cx=cv.getContext('2d'),ps=[],run=false;
+function rs(){cv.width=innerWidth;cv.height=innerHeight}rs();addEventListener('resize',rs);
+function burst(n){
+  var c=['#ff7aa8','#fff3a6','#aee1ff','#bff0c4','#ffd0a1','#ffffff','#ff4d6d'];
+  for(var i=0;i<n;i++){var a=Math.random()*Math.PI*2,s=6+Math.random()*10;
+    ps.push({x:innerWidth/2,y:innerHeight/2.2,vx:Math.cos(a)*s,vy:Math.sin(a)*s-6,r:4+Math.random()*6,c:c[i%c.length],rot:Math.random()*6,vr:(Math.random()-.5)*.4,l:90+Math.random()*50})}
+  if(!run){run=true;requestAnimationFrame(tick)}
+}
+function tick(){
+  cx.clearRect(0,0,cv.width,cv.height);
+  ps=ps.filter(function(p){return p.l>0});
+  ps.forEach(function(p){p.vy+=.22;p.vx*=.985;p.x+=p.vx;p.y+=p.vy;p.rot+=p.vr;p.l--;
+    cx.save();cx.translate(p.x,p.y);cx.rotate(p.rot);cx.globalAlpha=Math.min(1,p.l/30);cx.fillStyle=p.c;cx.fillRect(-p.r,-p.r/2,p.r*2,p.r);cx.restore()});
+  if(ps.length)requestAnimationFrame(tick);else{run=false;cx.clearRect(0,0,cv.width,cv.height)}
+}
+</script>
+</body>
+</html>
